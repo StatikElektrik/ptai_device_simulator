@@ -6,6 +6,8 @@ import logging
 from os import getenv
 from dotenv import load_dotenv
 
+from .argument_handler import ArgumentHandler
+
 # Create a logger interface.
 logger = logging.getLogger(__name__)
 
@@ -30,18 +32,28 @@ class ConfigHandler:
             - provision_secret : str
                 The provision secret of the device.
         """
-        config_content: dict[str, str] = {}
-
         # Load the environment variables.
         load_dotenv()
 
+        # Read the arguments passed to the program.
+        args = ArgumentHandler.read()
+
+        # Create a dictionary to store the content of the config file.
+        config_content: dict[str, str] = {}
+
         # Read connection section.
-        config_content["host"] = getenv("THINGSBOARD_HOST")
-        config_content["port"] = getenv("THINGSBOARD_PORT")
+        config_content["host"] = getenv("THINGSBOARD_HOST", args.host)
+        config_content["port"] = getenv("THINGSBOARD_PORT", args.port)
 
         #  Read device section
-        config_content["provision_key"] = getenv("DEVICE_PROVISION_KEY")
-        config_content["provision_secret"] = getenv("DEVICE_PROVISION_SECRET")
+        config_content["mac_addr"] = getenv("DEVICE_MAC_ADDR", args.mac_addr)
+        config_content["token"] = getenv("DEVICE_TOKEN", args.token)
+        config_content["provision_key"] = getenv(
+            "DEVICE_PROVISION_KEY", args.provision_key
+        )
+        config_content["provision_secret"] = getenv(
+            "DEVICE_PROVISION_SECRET", args.provision_secret
+        )
 
         # Return the content of the config file.
         return config_content

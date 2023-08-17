@@ -8,11 +8,17 @@ It creates a function, and creates arbitrary data with specified error rates. It
 ```
 
 ### Environmental Variables
-Create a `.env` file in the root directory of the project. Add the following variables to the file:
+Create a `.env` file in the root directory of the project. Not all the variables are required, but the ones that are not provided with
+environmental variables will need to be provided as command line arguments.
 
 ```bash
+# IoT Platform Variables
 THINGSBOARD_HOST="[HOST_COAP_URL_HERE]"
 THINGSBOARD_PORT="[HOST_COAP_PORT_HERE]"
+
+# Device Variables
+MAC_ADDR="[MAC_ADDRESS_HERE]"
+TOKEN="[DEVICE_TOKEN_HERE]"
 DEVICE_PROVISION_KEY="[DEVICE_PROVISION_KEY_HERE]"
 DEVICE_PROVISION_SECRET="[DEVICE_PROVISION_SECRET_HERE]"
 ```
