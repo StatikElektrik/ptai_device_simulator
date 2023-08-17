@@ -7,10 +7,9 @@ __all__ = [
     "Device",
     "ThingsboardConnector",
     "DataGenerator",
-    "RandomGenerator",
 ]
 
 from .config_handler import ConfigHandler
 from .abstractions import Device
 from .thingsboard_connector import ThingsboardConnector
-from .data_generator import DataGenerator, RandomGenerator
+from .data_generator import DataGenerator
