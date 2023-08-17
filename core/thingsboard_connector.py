@@ -5,8 +5,8 @@ import asyncio
 import json
 import logging
 
-from aiocoap import Context, Message, Code
 from typing import Any
+from aiocoap import Context, Message, Code
 
 # Create a logger interface.
 logger = logging.getLogger(__name__)
@@ -18,9 +18,7 @@ class ThingsboardConnector:
     # They must follow the best practices for Python.
 
     def __init__(self, hostname: str, port: int):
-        self.hostname = hostname
-        self.port = str(port)
-        self.server_address = "coap://" + self.hostname + ":" + self.port
+        self._server_address: str = "coap://" + hostname + ":" + port
 
     def request_provision(
         self, device_name: str, provision_key: str, provision_secret: str
@@ -86,7 +84,7 @@ class ThingsboardConnector:
             msg = Message(
                 code=Code.POST,
                 payload=str.encode(json.dumps(provision_request)),
-                uri=self.server_address + "/api/v1/provision",
+                uri=self._server_address + "/api/v1/provision",
             )
             request = client_context.request(msg)
             try:
@@ -114,7 +112,7 @@ class ThingsboardConnector:
         msg = Message(
             code=Code.POST,
             payload=str.encode(json.dumps(data)),
-            uri=self.server_address + ("/api/v1/%s/telemetry" % device_token),
+            uri=self._server_address + ("/api/v1/%s/telemetry" % device_token),
         )
 
         client_context = await Context.create_client_context()
@@ -140,7 +138,7 @@ class ThingsboardConnector:
         msg = Message(
             code=Code.POST,
             payload=str.encode(json.dumps(data)),
-            uri=self.server_address + ("/api/v1/%s/attributes" % device_token),
+            uri=self._server_address + ("/api/v1/%s/attributes" % device_token),
         )
 
         client_context = await Context.create_client_context()
