@@ -8,6 +8,8 @@ It creates a function, and creates arbitrary data with specified error rates. It
 ```
 
 ### Environmental Variables
+Create a `.env` file in the root directory of the project. Add the following variables to the file:
+
 ```bash
 THINGSBOARD_HOST="[HOST_COAP_URL_HERE]"
 THINGSBOARD_PORT="[HOST_COAP_PORT_HERE]"
