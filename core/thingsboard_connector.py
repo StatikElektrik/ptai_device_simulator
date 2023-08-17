@@ -7,6 +7,7 @@ import logging
 
 from typing import Any
 from aiocoap import Context, Message, Code
+from .abstractions import Device
 
 # Create a logger interface.
 logger = logging.getLogger(__name__)
@@ -66,6 +67,23 @@ class ThingsboardConnector:
             The data to be sent.
         """
         asyncio.run(self._send_attribute_data_async(device_token, data))
+
+    def register_device(self, device: Device) -> None:
+        """It registers a device on Thingsboard.
+
+        Parameters
+        ----------
+        device : Device
+            The device to be registered.
+        """
+        # Request a token from Thingsboard.
+        provision_info = device.get_provision_info()
+        token = self.request_provision(device.mac_address, provision_info[0], provision_info[1])
+        device.set_token(token)
+
+        # Send the device attributes to Thingsboard.
+        self.send_attribute_data(token, device.to_dict())
+
 
     async def _request_provision_async(
         self, device_name, device_provision_key, device_provision_secret

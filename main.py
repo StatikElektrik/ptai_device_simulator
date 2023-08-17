@@ -7,11 +7,10 @@ The main file of the simulated device. It is responsible for:
 """
 import logging
 import random
-import sys
 import time
 
 # Import all the core modules.
-from core import ConfigHandler, DataGenerator, RandomGenerator
+from core import ConfigHandler, DataGenerator
 from core import Device, ThingsboardConnector
 
 
@@ -25,32 +24,36 @@ if __name__ == "__main__":
     # Read the configurations.
     config = ConfigHandler.read()
 
+    # Create a ThingsboardConnector instance.
     connector = ThingsboardConnector(config["host"], config["port"])
 
-    start_points = [random.randint(0, 10) for _ in range(5)]
-    random_generators = [RandomGenerator(start_point) for start_point in start_points]
+    # Create a device instance.
+    device = Device(config["mac_addr"])
 
-    simulated_device = Device(
-        mac, "0.0.1", config["provision_key"], config["provision_secret"]
+    if config["token"]:
+        # If the token is provided, set it to the device.
+        # It means the device is already registered.
+        device.set_token(config["token"])
+    else:
+        # If the token is not provided, set the provision key and secret.
+        # It means the device is not registered. Use ThingsboardConnector
+        # to register.
+        device.set_provision_key(config["provision_key"])
+        device.set_provision_secret(config["provision_secret"])
+        connector.register_device(device)
+
+    # Create a data generator function.
+    data_pool = DataGenerator(
+        buffer_size=10,
+        function_type="sin",
+        function_parameters={"amplitude": 10, "frequency": 1, "phase": 0},
     )
-    if token:
-        simulated_device.set_token(token)
 
-    if not simulated_device.is_registered:
-        token = connector.request_provision(
-            simulated_device.name,
-            simulated_device.provision_key,
-            simulated_device.provision_secret,
-        )
-        simulated_device.set_token(token)
-
-        connector.send_attribute_data(
-            simulated_device.token, simulated_device.to_dict()
-        )
-
+    # Send telemetry data to the IoT platform.
     while True:
+        # @TODO: Send data only for the duration within a given frequency.
         connector.send_telemetry_data(
-            simulated_device.token,
-            DataGenerator.generate_analysis_data(random_generators),
+            device.get_token(),
+            data_pool.generate(),
         )
         time.sleep(random.randint(10, 60))
