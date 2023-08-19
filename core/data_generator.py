@@ -58,7 +58,7 @@ class DataGenerator:
         self._data_index = data_index
         self._buffer_size = buffer_size
 
-    def generate(self, step_size: int = 1, error_percentage: int = 0) -> list[float]:
+    def generate(self, step_size: float = 0.01, error_percentage: int = 0) -> list[float]:
         """Generate the data.
 
         Returns
@@ -66,10 +66,7 @@ class DataGenerator:
         list[float]
             The generated data.
         """
-        # @TODO: Update to work with small step sizes.
-        x_values = [
-            self._data_index + i for i in range(0, self._buffer_size * step_size, step_size)
-        ]
+        x_values = [self._data_index + (step_size * i) for i in range(self._buffer_size)]
         y_values = [self.function.calculate(x) for x in x_values]
         self._data_index += self._buffer_size
 

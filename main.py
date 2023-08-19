@@ -47,7 +47,7 @@ if __name__ == "__main__":
 
     # Create formatted data to be sent to the ThingSpeak.
     data_packet = device.get_formatted_data(
-        "e1", sensor_1.generate(0.001, 25),
+        "e1", sensor_1.generate(1, 25),
         "e2", sensor_2.generate(error_percentage=10),
     )
 
