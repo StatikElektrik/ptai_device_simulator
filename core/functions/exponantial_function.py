@@ -5,6 +5,7 @@ import numpy as np
 
 from .interface import BaseFunction
 
+
 class ExponantialFunction(BaseFunction):
     """This class calculates the exponantial function of a number."""
 
@@ -27,12 +28,12 @@ class ExponantialFunction(BaseFunction):
         self._shift = shift
         self._offset = offset
 
-    def calculate(self, x: float) -> float:
+    def calculate(self, x_value: float) -> float:
         """Calculate the exponantial function for a given x.
 
         Parameters
         ----------
-        x : float
+        x_value : float
             The x value.
 
         Returns
@@ -40,14 +41,14 @@ class ExponantialFunction(BaseFunction):
         float
             The y value.
         """
-        return self._offset + self._base ** (x + self._shift)
+        return self._offset + self._base ** (x_value + self._shift)
 
-    def inverse(self, y: float) -> float:
+    def inverse(self, y_value: float) -> float:
         """Calculate the inverse of the exponantial function for a given y.
 
         Parameters
         ----------
-        y : float
+        y_value : float
             The y value.
 
         Returns
@@ -55,4 +56,4 @@ class ExponantialFunction(BaseFunction):
         float
             The x value.
         """
-        return np.log(y - self._offset) / np.log(self._base) - self._shift
+        return np.log(y_value - self._offset) / np.log(self._base) - self._shift
