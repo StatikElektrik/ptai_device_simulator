@@ -18,16 +18,6 @@ LOG_FORMAT = "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
 logging.basicConfig(level=logging.INFO, format=LOG_FORMAT)
 logger = logging.getLogger(__name__)
 
-
-def create_data_pool(*args):
-    data_pool = {}
-    for i in range(0, len(args), 2):
-        entity = args[i]
-        value = args[i + 1]
-        data_pool[entity] = value
-    return data_pool
-
-
 if __name__ == "__main__":
     # Read the configurations.
     config = ConfigHandler.read()
@@ -67,6 +57,6 @@ if __name__ == "__main__":
         # @TODO: Send data only for the duration within a given frequency.
         connector.send_telemetry_data(
             device.get_token(),
-            create_data_pool('e1', data_gen_pool[0].generate(), 'e2', data_gen_pool[1].generate()),
+            device.create_formatted_data_pool('e1', data_gen_pool[0].generate(), 'e2', data_gen_pool[1].generate()),
         )
         time.sleep(random.randint(10, 60))
