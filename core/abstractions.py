@@ -77,21 +77,8 @@ class Device:
 
         return self._token
 
-    def to_dict(self):
-        """It returns a dictionary with the device information."""
-        return {
-            # "state": self.state,
-            # "error": self.error,
-            "fw": self.fw_version,
-            "is_registered": self.is_registered,
-            # "IMEI": self.modem.imei,
-            # "modem_fw": self.modem.fw_ver,
-            # "ICCID": self.sim_card.iccid,
-            # "IMSI": self.sim_card.imsi,
-        }
-     
     @staticmethod
-    def create_formatted_data_pool(*args):
+    def get_formatted_data(*args):
         """
         Given the error types and the values of errors, return a formatted dictionary.
 
@@ -112,3 +99,16 @@ class Device:
             value = args[i + 1]
             data_pool[entity] = value
         return data_pool
+
+    def to_dict(self):
+        """It returns a dictionary with the device information."""
+        return {
+            # "state": self.state,
+            # "error": self.error,
+            "fw": self.fw_version,
+            "is_registered": self.is_registered,
+            # "IMEI": self.modem.imei,
+            # "modem_fw": self.modem.fw_ver,
+            # "ICCID": self.sim_card.iccid,
+            # "IMSI": self.sim_card.imsi,
+        }
