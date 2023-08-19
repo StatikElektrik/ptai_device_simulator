@@ -13,11 +13,19 @@ import time
 from core import ConfigHandler, DataGenerator
 from core import Device, ThingsboardConnector
 
-
 # Create a custom logger interface.
 LOG_FORMAT = "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
 logging.basicConfig(level=logging.INFO, format=LOG_FORMAT)
 logger = logging.getLogger(__name__)
+
+
+def create_data_pool(*args):
+    data_pool = {}
+    for i in range(0, len(args), 2):
+        entity = args[i]
+        value = args[i + 1]
+        data_pool[entity] = value
+    return data_pool
 
 
 if __name__ == "__main__":
@@ -43,17 +51,22 @@ if __name__ == "__main__":
         connector.register_device(device)
 
     # Create a data generator function.
-    data_pool = DataGenerator(
-        buffer_size=10,
+    data_gen_pool = [DataGenerator(
+        buffer_size=5,
         function_type="sin",
         function_parameters={"amplitude": 10, "frequency": 1, "phase": 0},
-    )
+    ),
+        DataGenerator(
+            buffer_size=5,
+            function_type="sin",
+            function_parameters={"amplitude": 10, "frequency": 1, "phase": 0},
+        )]
 
     # Send telemetry data to the IoT platform.
     while True:
         # @TODO: Send data only for the duration within a given frequency.
         connector.send_telemetry_data(
             device.get_token(),
-            data_pool.generate(),
+            create_data_pool('e1', data_gen_pool[0].generate(), 'e2', data_gen_pool[1].generate()),
         )
         time.sleep(random.randint(10, 60))
