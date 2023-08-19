@@ -175,5 +175,5 @@ class ThingsboardConnector:
             logging.info(response)
         else:
             raise Exception(
-                "[THINGSBOARD CLIENT] Cannot save telemetry with received credentials!"
+                "[THINGSBOARD CLIENT] Cannot save attribute with received credentials!"
             )
