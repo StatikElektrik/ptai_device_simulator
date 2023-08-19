@@ -42,23 +42,17 @@ if __name__ == "__main__":
         connector.register_device(device)
 
     # Create a data generator function.
-    data_gen_pool = [DataGenerator(
-        buffer_size=5,
-        function_type="sin",
-        function_parameters={"amplitude": 10, "frequency": 1, "phase": 0},
-    ),
-        DataGenerator(
-            buffer_size=5,
-            function_type="sin",
-            function_parameters={"amplitude": 10, "frequency": 1, "phase": 0},
-        )]
+    sensor_1 = DataGenerator(5, "exponantial", {"base": 2.67, "offset": 25})
+    sensor_2 = DataGenerator(3, "exponantial", {"base": 3.38, "shift": 0.12})
 
+    # Create formatted data to be sent to the ThingSpeak.
+    data_packet = device.get_formatted_data(
+        "e1", sensor_1.generate(0.001, 25),
+        "e2", sensor_2.generate(error_percentage=10),
+    )
 
     # Send telemetry data to the IoT platform.
     while True:
         # @TODO: Send data only for the duration within a given frequency.
-        connector.send_telemetry_data(
-            device.get_token(),
-            device.create_formatted_data_pool('e1', data_gen_pool[0].generate(), 'e2', data_gen_pool[1].generate()),
-        )
+        connector.send_telemetry_data(device.get_token(), data_packet)
         time.sleep(random.randint(10, 60))
