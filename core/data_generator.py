@@ -19,10 +19,11 @@ class DataGenerator:
         function_type: str,
         function_parameters: dict[str, float],
     ) -> None:
-        pass
+        self.buffer_size = buffer_size
 
     def generate(self) -> list:
         """@TODO: What is this?"""
+        return [random.randint(0, 100) for _ in range(self.buffer_size)
 
     def _calculate_max_element(self, frequency: int, duration: int) -> int:
         """@TODO: What is this?"""
