@@ -66,8 +66,9 @@ class DataGenerator:
         list[float]
             The generated data.
         """
+        # @TODO: Update to work with small step sizes.
         x_values = [
-            self._data_index + i for i in range(0, self._buffer_size, step_size)
+            self._data_index + i for i in range(0, self._buffer_size * step_size, step_size)
         ]
         y_values = [self.function.calculate(x) for x in x_values]
         self._data_index += self._buffer_size
