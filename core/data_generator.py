@@ -3,7 +3,8 @@ This module is responsible for generating random data for the analysis.
 """
 import logging
 from typing import Any
-from numpy import random
+from random import randint
+from math import floor
 from .functions.exponantial_function import ExponantialFunction
 
 # Create a logger interface.
@@ -57,7 +58,7 @@ class DataGenerator:
         self._data_index = data_index
         self._buffer_size = buffer_size
 
-    def generate(self, step_size: int = 1, add_error: int = 0) -> list[float]:
+    def generate(self, step_size: int = 1, error_percentage: int = 0) -> list[float]:
         """Generate the data.
 
         Returns
@@ -72,8 +73,7 @@ class DataGenerator:
         self._data_index += self._buffer_size
 
         # Add error to the data.
-        if add_error > 0:
-            error_percentage = add_error / 100
+        if error_percentage > 0:
             y_values = self._add_error(y_values, error_percentage)
 
         return y_values
@@ -94,8 +94,15 @@ class DataGenerator:
         list[float]
             The y values with error.
         """
-        random_error_multiplier = random.randn(0, error_percentage)
-        return [y + (y * random_error_multiplier) for y in y_values]
+        # @TODO: Implement with numpy for better performance.
+        errored_y_values: list[float] = []
+        for y_value in y_values:
+            random_error_multiplier = randint(0, floor(error_percentage))
+            random_sign = randint(0, 1)
+            sign_multiplier = 1 if random_sign == 0 else -1
+            errored_y = y_value + sign_multiplier * (y_value * (random_error_multiplier / 100))
+            errored_y_values.append(errored_y)
+        return errored_y_values
 
     @staticmethod
     def _create_function(f_type: str, f_params: dict[str, Any]):
