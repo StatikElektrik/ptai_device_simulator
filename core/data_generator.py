@@ -38,10 +38,13 @@ class DataGenerator:
             )
 
         # Check if the function parameters are valid.
+        params_available: list
+        for func in self.SUPPORTED_FUNCTIONS:
+            if func["name"] == function_type:
+                params_available = func["parameters"]
+
         for parameter in function_parameters:
-            if parameter not in [
-                func["parameters"] for func in self.SUPPORTED_FUNCTIONS
-            ]:
+            if parameter not in params_available:
                 raise ValueError(
                     f"Parameter {parameter} is not supported. "
                     f"Supported parameters are {self.SUPPORTED_FUNCTIONS}"
@@ -54,7 +57,6 @@ class DataGenerator:
         self._data_index = data_index
         self._buffer_size = buffer_size
 
-
     def generate(self, step_size: int = 1, add_error: int = 0) -> list[float]:
         """Generate the data.
 
@@ -63,7 +65,9 @@ class DataGenerator:
         list[float]
             The generated data.
         """
-        x_values = [self._data_index + i for i in range(0, self._buffer_size, step_size)]
+        x_values = [
+            self._data_index + i for i in range(0, self._buffer_size, step_size)
+        ]
         y_values = [self.function.calculate(x) for x in x_values]
         self._data_index += self._buffer_size
 
