@@ -19,7 +19,7 @@ class ThingsboardConnector:
     # They must follow the best practices for Python.
 
     def __init__(self, hostname: str, port: int):
-        self._server_address: str = "coap://" + hostname + ":" + port
+        self._server_address: str = "coap://" + hostname + ":" + str(port)
 
     def request_provision(
         self, device_name: str, provision_key: str, provision_secret: str

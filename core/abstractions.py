@@ -26,28 +26,6 @@ class SimCard:
 
 class Device:
     """This class represents the device to be simulated."""
-    @staticmethod
-    def create_formatted_data_pool(*args):
-        """
-        Given the error types and the values of errors, return a formatted dictionary.
-
-        Parameters
-        ----------
-        *args : list or str
-            Expected data format : 'error_type_name', [list], 'error_type_name_2', [list] ....
-
-        Returns
-        -------
-        dict
-            Return the given data with the format that is expected by the device.
-            Example: {'e1': [10,20,30,40], 'e2': [20,30,40,50]}
-        """
-        data_pool = {}
-        for i in range(0, len(args), 2):
-            entity = args[i]
-            value = args[i + 1]
-            data_pool[entity] = value
-        return data_pool
 
     def __init__(
         self,
@@ -98,6 +76,29 @@ class Device:
             raise UserWarning("The device is not registered.")
 
         return self._token
+
+    @staticmethod
+    def get_formatted_data(*args):
+        """
+        Given the error types and the values of errors, return a formatted dictionary.
+
+        Parameters
+        ----------
+        *args : list or str
+            Expected data format : 'error_type_name', [list], 'error_type_name_2', [list] ....
+
+        Returns
+        -------
+        dict
+            Return the given data with the format that is expected by the device.
+            Example: {'e1': [10,20,30,40], 'e2': [20,30,40,50]}
+        """
+        data_pool = {}
+        for i in range(0, len(args), 2):
+            entity = args[i]
+            value = args[i + 1]
+            data_pool[entity] = value
+        return data_pool
 
     def to_dict(self):
         """It returns a dictionary with the device information."""
