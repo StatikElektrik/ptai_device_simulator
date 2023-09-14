@@ -67,7 +67,7 @@ class DataGenerator:
             The generated data.
         """
         x_values = [self._data_index + (step_size * i) for i in range(self._buffer_size)]
-        y_values = [self.function.calculate(x) for x in x_values]
+        y_values = [round(self.function.calculate(x), 3) for x in x_values]
         self._data_index += self._buffer_size
 
         # Add error to the data.
